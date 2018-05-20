@@ -1,0 +1,14 @@
+---
+
+- name: Download jenkins
+  get_url:
+    url: "http://pkg.jenkins-ci.org/debian/binary/jenkins_{{jenkins_version}}_all.deb"
+    dest: "/tmp/jenkins_{{jenkins_version}}_all.deb"
+    validate_certs: no
+  tags:
+    - jenkins
+
+- name: Ensure jenkins is installed.
+  apt: deb="/tmp/jenkins_{{jenkins_version}}_all.deb"
+  tags:
+    - jenkins

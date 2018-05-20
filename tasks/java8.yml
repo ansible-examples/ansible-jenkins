@@ -1,0 +1,25 @@
+---
+- name: java 8 | Update repositories
+  apt_repository: repo="ppa:webupd8team/java" update_cache=yes validate_certs=no
+  tags:
+  tags:
+    - java
+    - jenkins
+
+- name: Accept Java 8 License
+  become: true
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  tags:
+    - java
+    - jenkins
+
+- name: Install Oracle Java 8
+  become: yes
+  apt: name={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+  tags:
+    - java
+    - jenkins

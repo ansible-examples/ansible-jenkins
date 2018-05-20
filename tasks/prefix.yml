@@ -1,0 +1,16 @@
+---
+# TODO @afa: refactor: tasks already in ssl_settings.yml && settings.yml
+- name: Ensure URL prefix is present in Jenkins config.
+  lineinfile:
+    dest: "{{ jenkins_init_file }}"
+    insertafter: '^JENKINS_ARGS='
+    line: 'JENKINS_ARGS="$JENKINS_ARGS --prefix={{ jenkins_url_prefix }}"'
+  register: jenkins_init_config
+  tags:
+    - jenkins
+
+- name: Restart Jenkins if config changed.
+  service: name=jenkins state=restarted
+  when: jenkins_init_config.changed
+  tags:
+    - jenkins
